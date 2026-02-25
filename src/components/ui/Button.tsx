@@ -9,6 +9,23 @@ export interface ButtonProps
     asChild?: boolean;
 }
 
+type Variant = NonNullable<ButtonProps['variant']>;
+type Size = NonNullable<ButtonProps['size']>;
+
+const variantClasses: Record<Variant, string> = {
+    primary: 'bg-red-600 text-white hover:bg-red-700 shadow-sm transition-all active:scale-95',
+    secondary: 'bg-slate-900 text-white hover:bg-slate-800 transition-all active:scale-95',
+    outline: 'border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-900 transition-all active:scale-95',
+    ghost: 'bg-transparent hover:bg-slate-100 text-slate-900',
+    danger: 'bg-red-100 text-red-600 hover:bg-red-200 transition-all active:scale-95',
+};
+
+const sizeClasses: Record<Size, string> = {
+    sm: 'h-8 px-3 text-xs rounded-md',
+    md: 'h-10 px-4 py-2 rounded-lg',
+    lg: 'h-12 px-8 text-lg rounded-xl font-semibold',
+};
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant = 'primary', size = 'md', loading, asChild, ...props }, ref) => {
 
@@ -19,20 +36,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 ...props,
                 className: cn(
                     "inline-flex items-center justify-center font-medium ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-                    {
-                        'bg-red-600 text-white hover:bg-red-700 shadow-sm transition-all active:scale-95': variant === 'primary',
-                        'bg-slate-900 text-white hover:bg-slate-800 transition-all active:scale-95': variant === 'secondary',
-                        'border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-900 transition-all active:scale-95': variant === 'outline',
-                        'bg-transparent hover:bg-slate-100 text-slate-900': variant === 'ghost',
-                        'bg-red-100 text-red-600 hover:bg-red-200 transition-all active:scale-95': variant === 'danger',
-                    }[variant],
-                    {
-                        'h-8 px-3 text-xs rounded-md': size === 'sm',
-                        'h-10 px-4 py-2 rounded-lg': size === 'md',
-                        'h-12 px-8 text-lg rounded-xl font-semibold': size === 'lg',
-                    }[size],
+                    variantClasses[variant],
+                    sizeClasses[size],
                     className,
-                    Child.props.className
+                    (Child.props as any).className
                 ),
             } as any);
         }
@@ -43,18 +50,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 disabled={loading ? true : props.disabled}
                 className={cn(
                     "inline-flex items-center justify-center font-medium ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors",
-                    {
-                        'bg-red-600 text-white hover:bg-red-700 shadow-sm active:scale-95': variant === 'primary',
-                        'bg-slate-900 text-white hover:bg-slate-800 active:scale-95': variant === 'secondary',
-                        'border border-slate-200 bg-transparent hover:bg-slate-50 text-slate-900 active:scale-95': variant === 'outline',
-                        'bg-transparent hover:bg-slate-100 text-slate-900': variant === 'ghost',
-                        'bg-red-100 text-red-600 hover:bg-red-200 active:scale-95': variant === 'danger',
-                    }[variant],
-                    {
-                        'h-8 px-3 text-xs rounded-md': size === 'sm',
-                        'h-10 px-4 py-2 rounded-lg': size === 'md',
-                        'h-12 px-8 text-lg rounded-xl font-semibold': size === 'lg',
-                    }[size],
+                    variantClasses[variant],
+                    sizeClasses[size],
                     className
                 )}
                 {...props}
